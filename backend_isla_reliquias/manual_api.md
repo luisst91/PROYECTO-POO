@@ -1,6 +1,11 @@
 # Manual Rápido API - Isla de las Reliquias
 
 ## 1. Iniciar el Servidor
+si es primera vez, debes instalar los requirements:
+```bash
+pip install requirements.txt
+```
+
 Abre tu terminal en la carpeta del proyecto y ejecuta:
 ```bash
 python -m uvicorn main:app --reload
