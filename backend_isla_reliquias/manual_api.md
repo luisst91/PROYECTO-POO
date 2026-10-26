@@ -21,4 +21,4 @@ Entra en tu navegador a: **http://127.0.0.1:8000/docs**
 4. Presiona el botón azul **"Execute"**.
 
 ## Resultado
-¡Listo! La API generará el mapa con el cofre cifrado y guardará todo automáticamente (usando escritura atómica) en el archivo `data/db_expedicion.json`.
+La API generará el mapa con el cofre cifrado y guardará todo automáticamente en el archivo `data/db_expedicion.json`.
