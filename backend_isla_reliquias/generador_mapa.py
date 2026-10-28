@@ -233,7 +233,7 @@ def generar_partida(semilla=None, campamento_anterior=None, cofre_anterior=None,
             partida_id=partida_id,
             cofre_id="COFRE-01",
             reliquia_id="REL-ESPECIAL",
-            valor=4,
+            valor=4, #valor del cofre
             password=password
         )
 
