@@ -335,6 +335,9 @@ def mostrar_ubicacion_todos_los_jugadores(matriz_tablero, lista_jugadores):
         mostrar_ubicacion_jugador(matriz_tablero, jugador)
 
 
+#esto de imprimir tablero maybe lo borremos
+
+"""
 def imprimir_tablero(matriz_tablero, lista_jugadores):
     print()
     encabezado = "       "
@@ -362,9 +365,10 @@ def imprimir_tablero(matriz_tablero, lista_jugadores):
 
         print(linea)
         print()
+"""
 
 
 if __name__ == "__main__":
     matriz_resultado, datos_resultado = generar_partida()
     jugadores_partida = crear_jugadores(datos_resultado)
-    imprimir_tablero(matriz_resultado, jugadores_partida)
+    #imprimir_tablero(matriz_resultado, jugadores_partida)

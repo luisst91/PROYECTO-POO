@@ -1,0 +1,522 @@
+{
+  "jugadores": {},
+  "partidas": {
+    "PARTIDA-D69743A5": {
+      "partidaId": "PARTIDA-D69743A5",
+      "configuracion": {
+        "tablero": [
+          [
+            "P",
+            "P",
+            "S",
+            "S",
+            "S"
+          ],
+          [
+            "C",
+            "S",
+            "P",
+            "S",
+            "S"
+          ],
+          [
+            "T",
+            "X",
+            "S",
+            "S",
+            "S"
+          ],
+          [
+            "T",
+            "T",
+            "P",
+            "S",
+            "S"
+          ],
+          [
+            "S",
+            "S",
+            "T",
+            "S",
+            "S"
+          ]
+        ],
+        "casillas": [
+          {
+            "coordenada": "A1",
+            "fila": 0,
+            "columna": 0,
+            "tipo": "P"
+          },
+          {
+            "coordenada": "B1",
+            "fila": 0,
+            "columna": 1,
+            "tipo": "P"
+          },
+          {
+            "coordenada": "C1",
+            "fila": 0,
+            "columna": 2,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "D1",
+            "fila": 0,
+            "columna": 3,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "E1",
+            "fila": 0,
+            "columna": 4,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "A2",
+            "fila": 1,
+            "columna": 0,
+            "tipo": "C"
+          },
+          {
+            "coordenada": "B2",
+            "fila": 1,
+            "columna": 1,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "C2",
+            "fila": 1,
+            "columna": 2,
+            "tipo": "P"
+          },
+          {
+            "coordenada": "D2",
+            "fila": 1,
+            "columna": 3,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "E2",
+            "fila": 1,
+            "columna": 4,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "A3",
+            "fila": 2,
+            "columna": 0,
+            "tipo": "T"
+          },
+          {
+            "coordenada": "B3",
+            "fila": 2,
+            "columna": 1,
+            "tipo": "X"
+          },
+          {
+            "coordenada": "C3",
+            "fila": 2,
+            "columna": 2,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "D3",
+            "fila": 2,
+            "columna": 3,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "E3",
+            "fila": 2,
+            "columna": 4,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "A4",
+            "fila": 3,
+            "columna": 0,
+            "tipo": "T"
+          },
+          {
+            "coordenada": "B4",
+            "fila": 3,
+            "columna": 1,
+            "tipo": "T"
+          },
+          {
+            "coordenada": "C4",
+            "fila": 3,
+            "columna": 2,
+            "tipo": "P"
+          },
+          {
+            "coordenada": "D4",
+            "fila": 3,
+            "columna": 3,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "E4",
+            "fila": 3,
+            "columna": 4,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "A5",
+            "fila": 4,
+            "columna": 0,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "B5",
+            "fila": 4,
+            "columna": 1,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "C5",
+            "fila": 4,
+            "columna": 2,
+            "tipo": "T"
+          },
+          {
+            "coordenada": "D5",
+            "fila": 4,
+            "columna": 3,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "E5",
+            "fila": 4,
+            "columna": 4,
+            "tipo": "S"
+          }
+        ],
+        "campamento": "A2",
+        "cofre": "B3",
+        "jugadores": [
+          "string"
+        ]
+      },
+      "secretos": {
+        "templos": {
+          "A3": {
+            "coordenada": "A3",
+            "reliquia": {
+              "reliquiaId": "REL-01",
+              "valor": 3
+            },
+            "pista": {
+              "indice": 1,
+              "fragmento": "RTIHVS"
+            }
+          },
+          "A4": {
+            "coordenada": "A4",
+            "reliquia": {
+              "reliquiaId": "REL-02",
+              "valor": 1
+            },
+            "pista": null
+          },
+          "B4": {
+            "coordenada": "B4",
+            "reliquia": {
+              "reliquiaId": "REL-03",
+              "valor": 2
+            },
+            "pista": {
+              "indice": 2,
+              "fragmento": "8229"
+            }
+          },
+          "C5": {
+            "coordenada": "C5",
+            "reliquia": {
+              "reliquiaId": "REL-04",
+              "valor": 2
+            },
+            "pista": null
+          }
+        },
+        "cofre": {
+          "partidaId": "PARTIDA-D69743A5",
+          "cofreId": "COFRE-01",
+          "algoritmo": "AES/GCM/NoPadding",
+          "kdf": "PBKDF2WithHmacSHA256",
+          "iteraciones": 100000,
+          "longitudClaveBits": 256,
+          "saltBase64": "nxsu8fl1crYDqTkH6mxYvg==",
+          "nonceBase64": "jU6n0kH/L5wmTqZo",
+          "tagBits": 128,
+          "aadBase64": "UEFSVElEQS1ENjk3NDNBNXxDT0ZSRS0wMQ==",
+          "cifradoConTagBase64": "HvXlFpjpcelTotT6mpKI93y8qZqPekrkAS1fKZXG5zxEqIfJzh1f7EfPcZNwyLaA39F+QJ1yHKzd/sKu99ZxkoYO6zNK9d8fSxU0Ydhz6uj2vSfGOkysDj3HTz6LBA3YRSjLMwu26hYmTG4="
+        },
+        "pistasGeneradas": [
+          "RTIHVS",
+          "8229"
+        ]
+      }
+    },
+    "PARTIDA-A60C4EF9": {
+      "partidaId": "PARTIDA-A60C4EF9",
+      "configuracion": {
+        "tablero": [
+          [
+            "S",
+            "S",
+            "P",
+            "S",
+            "P"
+          ],
+          [
+            "S",
+            "S",
+            "P",
+            "S",
+            "T"
+          ],
+          [
+            "S",
+            "T",
+            "S",
+            "S",
+            "S"
+          ],
+          [
+            "S",
+            "T",
+            "S",
+            "C",
+            "S"
+          ],
+          [
+            "S",
+            "P",
+            "T",
+            "S",
+            "X"
+          ]
+        ],
+        "casillas": [
+          {
+            "coordenada": "A1",
+            "fila": 0,
+            "columna": 0,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "B1",
+            "fila": 0,
+            "columna": 1,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "C1",
+            "fila": 0,
+            "columna": 2,
+            "tipo": "P"
+          },
+          {
+            "coordenada": "D1",
+            "fila": 0,
+            "columna": 3,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "E1",
+            "fila": 0,
+            "columna": 4,
+            "tipo": "P"
+          },
+          {
+            "coordenada": "A2",
+            "fila": 1,
+            "columna": 0,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "B2",
+            "fila": 1,
+            "columna": 1,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "C2",
+            "fila": 1,
+            "columna": 2,
+            "tipo": "P"
+          },
+          {
+            "coordenada": "D2",
+            "fila": 1,
+            "columna": 3,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "E2",
+            "fila": 1,
+            "columna": 4,
+            "tipo": "T"
+          },
+          {
+            "coordenada": "A3",
+            "fila": 2,
+            "columna": 0,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "B3",
+            "fila": 2,
+            "columna": 1,
+            "tipo": "T"
+          },
+          {
+            "coordenada": "C3",
+            "fila": 2,
+            "columna": 2,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "D3",
+            "fila": 2,
+            "columna": 3,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "E3",
+            "fila": 2,
+            "columna": 4,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "A4",
+            "fila": 3,
+            "columna": 0,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "B4",
+            "fila": 3,
+            "columna": 1,
+            "tipo": "T"
+          },
+          {
+            "coordenada": "C4",
+            "fila": 3,
+            "columna": 2,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "D4",
+            "fila": 3,
+            "columna": 3,
+            "tipo": "C"
+          },
+          {
+            "coordenada": "E4",
+            "fila": 3,
+            "columna": 4,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "A5",
+            "fila": 4,
+            "columna": 0,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "B5",
+            "fila": 4,
+            "columna": 1,
+            "tipo": "P"
+          },
+          {
+            "coordenada": "C5",
+            "fila": 4,
+            "columna": 2,
+            "tipo": "T"
+          },
+          {
+            "coordenada": "D5",
+            "fila": 4,
+            "columna": 3,
+            "tipo": "S"
+          },
+          {
+            "coordenada": "E5",
+            "fila": 4,
+            "columna": 4,
+            "tipo": "X"
+          }
+        ],
+        "campamento": "D4",
+        "cofre": "E5",
+        "jugadores": [
+          "string"
+        ]
+      },
+      "secretos": {
+        "templos": {
+          "E2": {
+            "coordenada": "E2",
+            "reliquia": {
+              "reliquiaId": "REL-01",
+              "valor": 2
+            },
+            "pista": null
+          },
+          "B3": {
+            "coordenada": "B3",
+            "reliquia": {
+              "reliquiaId": "REL-02",
+              "valor": 1
+            },
+            "pista": null
+          },
+          "B4": {
+            "coordenada": "B4",
+            "reliquia": {
+              "reliquiaId": "REL-03",
+              "valor": 2
+            },
+            "pista": {
+              "indice": 2,
+              "fragmento": "6571"
+            }
+          },
+          "C5": {
+            "coordenada": "C5",
+            "reliquia": {
+              "reliquiaId": "REL-04",
+              "valor": 3
+            },
+            "pista": {
+              "indice": 1,
+              "fragmento": "ETKNWT"
+            }
+          }
+        },
+        "cofre": {
+          "partidaId": "PARTIDA-A60C4EF9",
+          "cofreId": "COFRE-01",
+          "algoritmo": "AES/GCM/NoPadding",
+          "kdf": "PBKDF2WithHmacSHA256",
+          "iteraciones": 100000,
+          "longitudClaveBits": 256,
+          "saltBase64": "79HSJ/E2tWASw+AHDfKslw==",
+          "nonceBase64": "SIeFC9kWskAOrOae",
+          "tagBits": 128,
+          "aadBase64": "UEFSVElEQS1BNjBDNEVGOXxDT0ZSRS0wMQ==",
+          "cifradoConTagBase64": "XgzMBxTC1NqRANvMDSiLIp7097R4Fs2suWE01dzbWCi1XECil/I666sSYxLwWTRLdRhZzR9gDKKEghaRNKXM7KsnqyjeEv+UTpjoumYIYGnF7r8rCkAOs8gF+xNxX/xiP3urD/6Gjq4ofy4="
+        },
+        "pistasGeneradas": [
+          "ETKNWT",
+          "6571"
+        ]
+      }
+    }
+  },
+  "requests_partidas": {}
+}
