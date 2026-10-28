@@ -114,7 +114,6 @@ holisss, al validar_tablero de ernesto le agregue esto para que cumpla mas las r
 """
 
 
-
 def validar_tablero(matriz_tablero):
     posicion_campamento = buscar_posiciones(matriz_tablero, "C")[0]
     posicion_cofre = buscar_posiciones(matriz_tablero, "X")[0]

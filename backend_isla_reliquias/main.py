@@ -46,7 +46,7 @@ def crear_partida(request: CrearPartidaRequest):
         }
     }
     
-    # Guardamos en tu storage atómico
+    # Guardamos en el storage
     db["partidas"][partida_id] = nueva_partida
     guardar_db(db)
     
