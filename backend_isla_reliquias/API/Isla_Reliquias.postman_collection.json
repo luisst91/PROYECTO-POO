@@ -1,0 +1,189 @@
+{
+  "info": {
+    "name": "Expedición Isla de las Reliquias",
+    "description": "Colección de pruebas para el contrato v2 de la API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8000/api/v1"
+    },
+    {
+      "key": "jugador1",
+      "value": ""
+    },
+    {
+      "key": "jugador2",
+      "value": ""
+    },
+    {
+      "key": "partidaId",
+      "value": ""
+    },
+    {
+      "key": "revision",
+      "value": "0"
+    },
+    {
+      "key": "requestId",
+      "value": "req-postman-001"
+    }
+  ],
+  "item": [
+    {
+      "name": "Salud",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/salud"
+      }
+    },
+    {
+      "name": "Registrar jugador 1",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201) pm.collectionVariables.set('jugador1', pm.response.json().jugadorId);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\":\"Ana\",\"alias\":\"ana_postman\"}"
+        },
+        "url": "{{baseUrl}}/jugadores"
+      }
+    },
+    {
+      "name": "Registrar jugador 2",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201) pm.collectionVariables.set('jugador2', pm.response.json().jugadorId);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"nombre\":\"Luis\",\"alias\":\"luis_postman\"}"
+        },
+        "url": "{{baseUrl}}/jugadores"
+      }
+    },
+    {
+      "name": "Listar jugadores",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/jugadores"
+      }
+    },
+    {
+      "name": "Consultar estadísticas",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/jugadores/{{jugador1}}/estadisticas"
+      }
+    },
+    {
+      "name": "Crear partida",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201) {",
+              "    const partida = pm.response.json();",
+              "    pm.collectionVariables.set('partidaId', partida.partidaId);",
+              "    pm.collectionVariables.set('revision', partida.revision);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"requestId\":\"{{requestId}}\",\"jugadores\":[\"{{jugador1}}\",\"{{jugador2}}\"]}"
+        },
+        "url": "{{baseUrl}}/partidas"
+      }
+    },
+    {
+      "name": "Listar partidas",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/partidas"
+      }
+    },
+    {
+      "name": "Consultar partida",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/partidas/{{partidaId}}"
+      }
+    },
+    {
+      "name": "Consultar templo",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/partidas/{{partidaId}}/templos/A1"
+      }
+    },
+    {
+      "name": "Consultar cofre",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/partidas/{{partidaId}}/cofre"
+      }
+    },
+    {
+      "name": "Guardar estado",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"revisionBase\":{{revision}},\"estado\":{\"estado\":\"EN_CURSO\",\"ronda\":1,\"indiceJugadorActual\":0,\"accionesRestantes\":3,\"jugadores\":[{\"jugadorId\":\"{{jugador1}}\",\"posicion\":\"A1\",\"puntos\":0,\"inventario\":[],\"entregadas\":[]},{\"jugadorId\":\"{{jugador2}}\",\"posicion\":\"A1\",\"puntos\":0,\"inventario\":[],\"entregadas\":[]}],\"templosExplorados\":[],\"pistas\":[],\"cofreAbierto\":false,\"ganadores\":[]}}"
+        },
+        "url": "{{baseUrl}}/partidas/{{partidaId}}/estado"
+      }
+    }
+  ]
+}

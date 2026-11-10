@@ -2,6 +2,7 @@ import os
 import json
 import tempfile
 import copy
+from pathlib import Path
 
 """
 * configura la carpeta y el archivo donde se va a guardar toda la informacion del juego (db_expedicion.json)
@@ -12,9 +13,14 @@ import copy
 tienes menos posibilidad de corromperse
 """
 
+DATA_DIR = Path(
+    os.environ.get(
+        "ISLA_DATA_DIR",
+        str(Path(__file__).resolve().parent / "data")
+    )
+)
 
-DATA_DIR = "data"
-DB_FILE = os.path.join(DATA_DIR, "db_expedicion.json")
+DB_FILE = DATA_DIR / "db_expedicion.json"
 
 DB_INICIAL = {
     "jugadores": {},
@@ -23,24 +29,41 @@ DB_INICIAL = {
 }
 
 def cargar_db():
-    if not os.path.exists(DB_FILE):
-        os.makedirs(DATA_DIR, exist_ok=True)
-        guardar_db(DB_INICIAL)
+    if not DB_FILE.exists():
+        DATA_DIR.mkdir(parents=True, exist_ok=True)
+        guardar_db(copy.deepcopy(DB_INICIAL))
         return copy.deepcopy(DB_INICIAL)
 
-    with open(DB_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
+    with DB_FILE.open("r", encoding="utf-8") as archivo:
+        datos = json.load(archivo)
+
+    for clave in DB_INICIAL:
+        datos.setdefault(clave, {})
+
+    return datos
 
 def guardar_db(datos):
-    os.makedirs(DATA_DIR, exist_ok=True)
-    fd, ruta_temporal = tempfile.mkstemp(dir=DATA_DIR, prefix="tmp_", suffix=".json")
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+    fd, ruta_temporal = tempfile.mkstemp(
+        dir=DATA_DIR,
+        prefix="tmp_",
+        suffix=".json"
+    )
+
     try:
-        with os.fdopen(fd, "w", encoding="utf-8") as f_temp:
-            json.dump(datos, f_temp, ensure_ascii=False, indent=2)
-            f_temp.flush()
-            os.fsync(f_temp.fileno())
+        with os.fdopen(fd, "w", encoding="utf-8") as archivo:
+            json.dump(
+                datos,
+                archivo,
+                ensure_ascii=False,
+                indent=2
+            )
+            archivo.flush()
+            os.fsync(archivo.fileno())
+
         os.replace(ruta_temporal, DB_FILE)
-    except Exception as e:
+
+    finally:
         if os.path.exists(ruta_temporal):
             os.remove(ruta_temporal)
-        raise e

@@ -92,7 +92,7 @@ Al validar_tablero de ernesto le agregue esto para que cumpla mas las reglas del
 """
 
 
-def validar_tablero(matriz_tablero):
+def validar_tablero(matriz_tablero, rng=None):
     posicion_campamento = buscar_posiciones(matriz_tablero, "C")[0]
     posicion_cofre = buscar_posiciones(matriz_tablero, "X")[0]
     posiciones_templos = buscar_posiciones(matriz_tablero, "T")
@@ -144,7 +144,9 @@ def validar_tablero(matriz_tablero):
     if not parejas_validas:
         return None
 
-    t_pista1, t_pista2 = random.choice(parejas_validas)
+    t_pista1, t_pista2 = (
+        rng if rng is not None else random.SystemRandom()
+    ).choice(parejas_validas)
 
     datos_partida = {
         "campamento": convertir_a_coordenada(posicion_campamento[0], posicion_campamento[1]),
@@ -157,14 +159,17 @@ def validar_tablero(matriz_tablero):
     return datos_partida
 
 
-def generar_matriz_aleatoria():
+def generar_matriz_aleatoria(rng=None):
     lista_casillas = []
 
     for tipo_casilla in CANTIDAD_POR_TIPO:
         for repeticion in range(CANTIDAD_POR_TIPO[tipo_casilla]):
             lista_casillas.append(tipo_casilla)
 
-    lista_casillas = np.random.permutation(lista_casillas)
+    lista_casillas = (
+        rng if rng is not None else np.random.default_rng()
+    ).permutation(lista_casillas)
+
     matriz_tablero = lista_casillas.reshape(CANTIDAD_FILAS, CANTIDAD_COLUMNAS)
 
     return matriz_tablero
@@ -182,12 +187,16 @@ A generar_partida le agregue esto para armar el juego completo con las reglas de
 
 def generar_partida(semilla=None, campamento_anterior=None, cofre_anterior=None, pistas_anteriores=None, partida_id="EX-RED-01"):
     if semilla is not None:
-        np.random.seed(semilla)
-        random.seed(semilla)
+        # Semilla opcional solo para pruebas; la criptografía usa os.urandom.
+        rng = np.random.default_rng(semilla)
+        random_rng = random.Random(semilla)
+    else:
+        rng = np.random.default_rng()
+        random_rng = random.SystemRandom()
 
     for numero_intento in range(1, MAXIMO_CANDIDATOS + 1):
-        matriz_tablero = generar_matriz_aleatoria()
-        datos_partida = validar_tablero(matriz_tablero)
+        matriz_tablero = generar_matriz_aleatoria(rng)
+        datos_partida = validar_tablero(matriz_tablero, random_rng)
 
         if datos_partida is None:
             continue
@@ -198,8 +207,8 @@ def generar_partida(semilla=None, campamento_anterior=None, cofre_anterior=None,
         if cofre_anterior is not None and datos_partida["cofre"] == cofre_anterior:
             continue
 
-        pista1 = "".join(random.choices(string.ascii_uppercase, k=6))
-        pista2 = f"{random.randint(0, 9999):04d}"
+        pista1 = "".join(random_rng.choices(string.ascii_uppercase, k=6))
+        pista2 = f"{random_rng.randint(0, 9999):04d}"
 
         if pistas_anteriores is not None and (pista1, pista2) == tuple(pistas_anteriores):
             continue
@@ -218,7 +227,7 @@ def generar_partida(semilla=None, campamento_anterior=None, cofre_anterior=None,
             continue
 
         valores_reliquias = [1, 2, 2, 3]
-        random.shuffle(valores_reliquias)
+        random_rng.shuffle(valores_reliquias)
 
         secretos_templos = {}
         for idx, coord_t in enumerate(datos_partida["templos"]):
