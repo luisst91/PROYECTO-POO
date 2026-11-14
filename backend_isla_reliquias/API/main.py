@@ -265,4 +265,3 @@ def guardar_estado(partida_id: str, request: GuardarEstadoRequest):
 
     return {"partidaId": partida_id, "revision": nueva_revision}
     
-    return {"mensaje": "Partida generada con éxito", "partida": nueva_partida}
