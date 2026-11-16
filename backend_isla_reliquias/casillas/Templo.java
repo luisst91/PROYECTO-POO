@@ -40,9 +40,4 @@ public class Templo extends Casilla {
         this.explorado = explorado;
     }
 
-    @Override
-    public  int obtenerCostoMovimiento(){
-        return 1;
-    }
-
 }
