@@ -6,6 +6,7 @@ public abstract class Casilla {
     protected char simbolo;
     protected int fila;
     protected int columna;
+    protected int costoCasilla;
 
     public Casilla(String nombreCasilla, char simbolo, int fila, int columna) {
         this.nombreCasilla = nombreCasilla;
@@ -45,6 +46,8 @@ public abstract class Casilla {
     public void setColumna(int columna) {
         this.columna = columna;
     }
+
+}
 
     public abstract int obtenerCostoMovimiento();
 }
