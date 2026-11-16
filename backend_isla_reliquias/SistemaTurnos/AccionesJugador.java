@@ -18,7 +18,7 @@ public class AccionesJugador {
         }
         else{
             if (gestorTurnos.gastarAcciones(destino.obtenerCostoMovimiento())){
-                jugadorActual.moverA(destino);
+                jugadorActual.actualizarCoordenadas(destino);
                 System.out.println("MOVIMIENTO EXITOSO A: " + destino.getNombreCasilla());
             }
             else{
