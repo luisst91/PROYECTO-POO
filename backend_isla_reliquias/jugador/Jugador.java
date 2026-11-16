@@ -21,8 +21,9 @@ public class Jugador {
         this.inventarioReliquias = inventarioReliquias;
         this.estadoTurno = estadoTurno;
     }
-    public moverJugador(Casilla destino){
-
+    public void actualizarCoordenadas(Casilla destino) {
+        this.filaActual = destino.getFila();
+        this.columnaActual = destino.getColumna();
     }
 
     public void entregarReliquia(){
