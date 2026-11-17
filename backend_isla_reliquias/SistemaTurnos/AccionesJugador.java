@@ -13,14 +13,44 @@ import objetos.Reliquia;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+/**
+ * Controlador encargado de ejecutar y validar las distintas acciones que un jugador
+ * puede realizar durante su turno: desplazarse por el tablero, explorar templos,
+ * entregar reliquias en el campamento e intentar descifrar y abrir el cofre.
+ * 
+ * @author Ernesto Gutiérrez, Diego Nieto, Luis Torres
+ * @version 1.0
+ */
 
 public class AccionesJugador {
+    /**
+     * Referencia al tablero de juego donde se ubican las casillas y los jugadores.
+     */
     private Tablero tablero;
+    /**
+     * Gestor encarga de validar y descontar los puntos de accion disponibles en el turno
+     */
     private GestorTurnos gestorTurnos;
+    /**
+     * Cliente HTTP usado para consultar informacion de templos y cofres al servidor
+     */
     private ClienteApi cliente;
+    /**
+     * Identificador único de la partida en curso en el servidor
+     */
     private String partidaId;
+    /**
+     * Lista compartida de pistas descubiertas al exploraer los templos durante la partida
+     */
     private ArrayList<Pista> pistasConocidas = new ArrayList<>();
-
+    /**
+     * Constrye una nueva instancia del controlador de acciones del jugador
+     * 
+     * @param tablero      El {@link Tablero} activo de la partida.
+     * @param gestorTurnos El {@link GestorTurnos} que controla las acciones restantes.
+     * @param cliente      La instancia de {@link ClienteApi} para comunicarse con el backend.
+     * @param partidaId    El identificador único de la partida actual.
+     */
     public AccionesJugador(Tablero tablero, GestorTurnos gestorTurnos, ClienteApi cliente, String partidaId) {
         this.tablero = tablero;
         this.gestorTurnos = gestorTurnos;
@@ -28,10 +58,23 @@ public class AccionesJugador {
         this.partidaId = partidaId;
     }
 
+    /**
+     * Obtiene la lista de pistas que han sido descubiertas hasta el momento en la partida
+     * @return Un {@link ArrayList} con los objetos {@link Pista} conocidos
+     */
     public ArrayList<Pista> getPistasConocidas() {
         return pistasConocidas;
     }
 
+    /**
+     * Valida y ejecuta el desplazamiento de un jugador hacia una casilla destino.
+     * Comprueba que la coordenada exista, que la casilla esté justo al lado del jugador
+     * y que disponga de suficientes puntos de acción para cubrir el costo del terreno.
+     *
+     * @param jugadorActual El {@link Jugador} que intenta realizar el movimiento.
+     * @param filaNueva     Índice de la fila de la casilla destino.
+     * @param columnaNueva  Índice de la columna de la casilla destino.
+     */
     public void procesarMovimiento(Jugador jugadorActual, int filaNueva, int columnaNueva){
 
         Casilla destino = tablero.obtenerCasilla(filaNueva, columnaNueva);
@@ -53,6 +96,14 @@ public class AccionesJugador {
     }
 
     // explorar un templo y recoger su reliquia (cuesta 1 accion)
+
+    /**
+     * Procesa la exploración de un {@link Templo} en la posición actual del jugador (cuesta 1 acción).
+     * Consulta la API para obtener la {@link Reliquia} oculta y, si el templo contiene un fragmento
+     * de clave, registra la nueva {@link Pista} en la lista de pistas conocidas.
+     *
+     * @param jugadorActual El {@link Jugador} que intenta explorar el templo.
+     */
     public void procesarExploracion(Jugador jugadorActual){
         Casilla actual = tablero.obtenerCasilla(jugadorActual.getFilaActual(), jugadorActual.getColumnaActual());
 
@@ -102,6 +153,13 @@ public class AccionesJugador {
     }
 
     // entregar todas las reliquias en el campamento (cuesta 1 accion)
+
+    /**
+     * Procesa la entrega de todas las reliquias que lleva el jugador cuando se encuentra
+     * ubicado en la casilla de {@link Campamento} (cuesta 1 acción), sumando los puntos correspondientes.
+     *
+     * @param jugadorActual El {@link Jugador} que desea depositar sus reliquias.
+     */
     public void procesarEntrega(Jugador jugadorActual){
         Casilla actual = tablero.obtenerCasilla(jugadorActual.getFilaActual(), jugadorActual.getColumnaActual());
 
@@ -125,6 +183,16 @@ public class AccionesJugador {
     }
 
     // intentar abrir el cofre con la contrasena (cuesta 1 accion si el formato es valido)
+
+    /**
+     * Gestiona el intento de apertura del {@link Cofre} cuando el jugador está sobre su casilla.
+     * Verifica que se conozcan al menos 2 pistas, valida el formato de la clave ingresada por consola
+     * (consumiendo 1 acción si el formato es válido) y utiliza {@link Descifrador} para autenticar
+     * el paquete del servidor y otorgar la reliquia especial si la clave es correcta.
+     *
+     * @param jugadorActual El {@link Jugador} que intenta abrir el cofre.
+     * @param teclado       Instancia de {@link Scanner} para leer la contraseña ingresada por el usuario.
+     */
     public void procesarAperturaCofre(Jugador jugadorActual, Scanner teclado){
         Casilla actual = tablero.obtenerCasilla(jugadorActual.getFilaActual(), jugadorActual.getColumnaActual());
 
@@ -186,6 +254,10 @@ public class AccionesJugador {
         System.out.println("COFRE ABIERTO! RECIBISTE " + idReliquia + " (" + valor + " PUNTOS)");
     }
 
+    /**
+     * Imprime en consola todas las pistas que han sido descubiertas hasta el momento en la partida,
+     * o un aviso si aún no se ha encontrado ninguna.
+     */
     public void mostrarPistas(){
         if (pistasConocidas.size() == 0){
             System.out.println("TODAVIA NO CONOCEN NINGUNA PISTA");
@@ -197,6 +269,15 @@ public class AccionesJugador {
     }
 
     // formato: letras mayusculas y numeros, con maximo un guion en medio, de 4 a 20 caracteres
+    
+    /**
+     * Valida que la contraseña ingresada cumpla con las reglas de formato exigidas:
+     * tener entre 4 y 20 caracteres, contener únicamente letras mayúsculas (A-Z), números (0-9)
+     * y como máximo un guion ({@code -}) ubicado en una posición intermedia (ni al inicio ni al final).
+     *
+     * @param clave Cadena en mayúsculas ingresada por el jugador.
+     * @return {@code true} si la cadena respeta el formato permitido; {@code false} en caso contrario.
+     */
     private boolean formatoValido(String clave){
         if (clave.length() < 4 || clave.length() > 20){
             return false;
