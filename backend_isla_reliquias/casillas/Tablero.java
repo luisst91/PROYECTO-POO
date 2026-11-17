@@ -1,13 +1,36 @@
 package casillas;
 
+/**
+ * Representa el mapa de la partida: una cuadrícula de 5X5 casillas donde se mueven los jugadores.
+ * Se construye a partir de la matriz de letras enviada por la API (C, X, T, P, S) y convierte
+ * cada letra en el objeto {@link Casilla} que le corresponde (Campamento, Cofre, Templo, Pantano o Sendero).
+ * Las columnas se nombran con letras (A-E) y las filas con números (1-5), por ejemplo "B2".
+ *
+ * @author Ernesto Gutiérrez, Diego Nieto, Luis Torres
+ * @version 1.0
+ */
 public class Tablero {
 
+    /**
+     * Cantidad de filas del tablero
+     */
     public static final int FILAS = 5;
+    /**
+     * Cantidad de columnas del tablero
+     */
     public static final int COLUMNAS = 5;
 
+    /**
+     * Matriz que guarda cada una de las casillas del tablero, indexada como [fila][columna]
+     */
     private Casilla[][] casillas = new Casilla[FILAS][COLUMNAS];
 
-    // recibe la matriz de letras que manda la API: C, X, T, P, S
+    /**
+     * Construye el tablero recorriendo la matriz de letras recibida de la API y creando
+     * una casilla por cada símbolo mediante {@link #crearCasilla(char, int, int)}.
+     *
+     * @param simbolos Matriz de 5X5 con los símbolos de cada casilla: C, X, T, P o S
+     */
     public Tablero(char[][] simbolos) {
         for (int f = 0; f < FILAS; f++) {
             for (int c = 0; c < COLUMNAS; c++) {
@@ -16,6 +39,16 @@ public class Tablero {
         }
     }
 
+    /**
+     * Crea el tipo de casilla que corresponde a un símbolo: C para el {@link Campamento}, X para el {@link Cofre},
+     * T para un {@link Templo} (sin reliquia ni pista hasta que se explore), P para un {@link Pantano}
+     * y cualquier otro símbolo (S) para un {@link Sendero}.
+     *
+     * @param simbolo Letra que identifica el tipo de terreno
+     * @param fila Fila donde se ubicará la casilla
+     * @param columna Columna donde se ubicará la casilla
+     * @return La casilla creada, con el tipo que corresponde al símbolo
+     */
     private Casilla crearCasilla(char simbolo, int fila, int columna) {
         if (simbolo == 'C') {
             return new Campamento("Campamento", simbolo, fila, columna);
@@ -32,7 +65,13 @@ public class Tablero {
         return new Sendero("Sendero", simbolo, fila, columna);
     }
 
-    // devuelve null si la coordenada esta fuera del tablero
+    /**
+     * Busca la casilla que se encuentra en una fila y columna específicas del tablero.
+     *
+     * @param fila Número de fila (empieza en 0)
+     * @param columna Número de columna (empieza en 0)
+     * @return La {@link Casilla} de esa posición, o {@code null} si la coordenada está fuera de los límites del tablero
+     */
     public Casilla obtenerCasilla(int fila, int columna) {
         if (fila < 0 || fila >= FILAS || columna < 0 || columna >= COLUMNAS) {
             return null;
@@ -40,7 +79,13 @@ public class Tablero {
         return casillas[fila][columna];
     }
 
-    // recibe algo como "B2" (letra = columna, numero = fila). Devuelve null si no es valida
+    /**
+     * Busca una casilla a partir de su coordenada escrita en texto, por ejemplo {@code "B2"},
+     * donde la letra es la columna (A = 0) y el número es la fila (1 = 0).
+     *
+     * @param coordenada Texto de dos caracteres con la letra de la columna y el número de la fila
+     * @return La {@link Casilla} de esa coordenada, o {@code null} si el texto es nulo, no tiene dos caracteres o está fuera del tablero
+     */
     public Casilla obtenerCasilla(String coordenada) {
         if (coordenada == null || coordenada.length() != 2) {
             return null;
@@ -50,6 +95,13 @@ public class Tablero {
         return obtenerCasilla(fila, columna);
     }
 
+    /**
+     * Convierte una posición numérica en su coordenada de texto. Por ejemplo, fila 1 y columna 1 se convierten en {@code "B2"}.
+     *
+     * @param fila Número de fila (empieza en 0)
+     * @param columna Número de columna (empieza en 0)
+     * @return La coordenada en texto, con la letra de la columna seguida del número de la fila
+     */
     public static String convertirACoordenada(int fila, int columna) {
         return "" + (char) ('A' + columna) + (fila + 1);
     }
