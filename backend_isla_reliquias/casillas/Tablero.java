@@ -1,7 +1,7 @@
 package casillas;
 
 /**
- * Representa el mapa de la partida: una cuadrícula de 5X5 casillas donde se mueven los jugadores.
+ * Representa el mapa de la partida: una cuadrícula de casillas (el tamaño lo define la API) donde se mueven los jugadores.
  * Se construye a partir de la matriz de letras enviada por la API (C, X, T, P, S) y convierte
  * cada letra en el objeto {@link Casilla} que le corresponde (Campamento, Cofre, Templo, Pantano o Sendero).
  * Las columnas se nombran con letras (A-E) y las filas con números (1-5), por ejemplo "B2".
@@ -12,28 +12,66 @@ package casillas;
 public class Tablero {
 
     /**
-     * Cantidad de filas del tablero
+     * Cantidad de filas del tablero. No tiene un valor fijo: se coloca con {@link #setFilas(int)}
+     * con el valor que entrega la API.
      */
-    public static final int FILAS = 5;
+    private static int filas;
     /**
-     * Cantidad de columnas del tablero
+     * Cantidad de columnas del tablero. No tiene un valor fijo: se coloca con {@link #setColumnas(int)}
+     * con el valor que entrega la API.
      */
-    public static final int COLUMNAS = 5;
+    private static int columnas;
+
+    /**
+     * Devuelve la cantidad de filas que tiene el tablero.
+     *
+     * @return El número de filas configurado
+     */
+    public static int getFilas() {
+        return filas;
+    }
+
+    /**
+     * Coloca la cantidad de filas del tablero. Se debe llamar antes de crear un {@link Tablero}.
+     *
+     * @param nuevasFilas Nuevo número de filas que entrega la API
+     */
+    public static void setFilas(int nuevasFilas) {
+        filas = nuevasFilas;
+    }
+
+    /**
+     * Devuelve la cantidad de columnas que tiene el tablero.
+     *
+     * @return El número de columnas configurado
+     */
+    public static int getColumnas() {
+        return columnas;
+    }
+
+    /**
+     * Coloca la cantidad de columnas del tablero. Se debe llamar antes de crear un {@link Tablero}.
+     *
+     * @param nuevasColumnas Nuevo número de columnas que entrega la API
+     */
+    public static void setColumnas(int nuevasColumnas) {
+        columnas = nuevasColumnas;
+    }
 
     /**
      * Matriz que guarda cada una de las casillas del tablero, indexada como [fila][columna]
      */
-    private Casilla[][] casillas = new Casilla[FILAS][COLUMNAS];
+    private Casilla[][] casillas = new Casilla[filas][columnas];
 
     /**
      * Construye el tablero recorriendo la matriz de letras recibida de la API y creando
      * una casilla por cada símbolo mediante {@link #crearCasilla(char, int, int)}.
      *
-     * @param simbolos Matriz de 5X5 con los símbolos de cada casilla: C, X, T, P o S
+     * @param simbolos Matriz de filas X columnas con los símbolos de cada casilla: C, X, T, P o S
      */
     public Tablero(char[][] simbolos) {
-        for (int f = 0; f < FILAS; f++) {
-            for (int c = 0; c < COLUMNAS; c++) {
+        for (int f = 0; f < filas; f++) {
+            for (int c = 0; c < columnas; c++) {
                 casillas[f][c] = crearCasilla(simbolos[f][c], f, c);
             }
         }
@@ -73,7 +111,7 @@ public class Tablero {
      * @return La {@link Casilla} de esa posición, o {@code null} si la coordenada está fuera de los límites del tablero
      */
     public Casilla obtenerCasilla(int fila, int columna) {
-        if (fila < 0 || fila >= FILAS || columna < 0 || columna >= COLUMNAS) {
+        if (fila < 0 || fila >= filas || columna < 0 || columna >= columnas) {
             return null;
         }
         return casillas[fila][columna];
