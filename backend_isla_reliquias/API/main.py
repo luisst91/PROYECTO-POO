@@ -22,10 +22,29 @@ app = FastAPI(title="API Isla de las Reliquias")
 lock_db = threading.Lock()
 
 class CrearPartidaRequest(BaseModel):
+    """
+    Cuerpo que debe mandar Java en POST /partidas.
+    Attributes: jugadores: Lista con exactamente dos nombres de jugador (minimo 2 y maximo 2).
+    """
     jugadores: List[str] = Field(min_length=2, max_length=2)
 
 @app.post("/partidas")
 def crear_partida(request: CrearPartidaRequest):
+    """
+    Endpoint POST /partidas: crea una partida nueva para dos jugadores.
+    Que hace paso a paso:
+        1. Inventa un ID unico para la partida (tipo PARTIDA-A1B2C3D4).
+        2. Llama a generar_partida() de generador_mapa.py para fabricar el tablero 5X5, las reliquias,
+           las pistas y el cofre cifrado.
+        3. Sortea con random.shuffle() el orden en que van a jugar los dos jugadores.
+        4. Arma la partida en dos partes: "configuracion" (lo publico: tablero, campamento, cofre y jugadores)
+           y "secretos" (lo que solo conoce el servidor: reliquias de los templos, paquete cifrado y pistas).
+        5. Guarda la partida en el archivo JSON usando el candado lock_db para que dos peticiones
+           no se pisen al guardar.
+        6. Devuelve a Java solo la configuracion; los secretos se piden despues, cuando hacen falta.
+    Args: request: Cuerpo de la peticion con la lista de dos jugadores.
+    Returns:Un diccionario con el mensaje de exito, el partidaId y la configuracion de la partida. Si no se pudo generar un mapa valido responde con error 500.
+    """
     partida_id = f"PARTIDA-{str(uuid.uuid4())[:8].upper()}"
     
     _, datos_partida = generar_partida(partida_id=partida_id)
@@ -68,6 +87,14 @@ def crear_partida(request: CrearPartidaRequest):
     }
 
 def buscar_partida(partida_id: str):
+    """
+    Funcion auxiliar (no es un endpoint): busca una partida guardada en el archivo JSON por su ID.
+    La usan los endpoints de templos y cofre para no repetir el mismo codigo.
+
+    Args: partida_id: Identificador de la partida, por ejemplo PARTIDA-A1B2C3D4.
+
+    Returns: El diccionario con todos los datos de la partida (configuracion y secretos). Si no existe responde con error 404 "Partida no encontrada".
+    """
     with lock_db:
         db = cargar_db()
     partida = db["partidas"].get(partida_id)
@@ -77,6 +104,15 @@ def buscar_partida(partida_id: str):
 
 @app.get("/partidas/{partida_id}/templos/{coord}")
 def obtener_templo(partida_id: str, coord: str):
+    """
+    Endpoint GET /partidas/{partida_id}/templos/{coord}: devuelve el contenido secreto de un templo.
+    Java lo llama cuando un jugador explora un templo para saber que reliquia hay y si tiene pista.
+
+    Args: partida_id: Identificador de la partida. Coord: Coordenada del templo, por ejemplo B3 (se convierte a mayusculas).
+
+    Returns: El diccionario del templo con su coordenada, su reliquia (id y valor) y su pista (indice y fragmento, o null si ese templo no tiene pista).
+        Si en esa coordenada no hay un templo normal responde con error 404.
+    """
     partida = buscar_partida(partida_id)
     templo = partida["secretos"]["templos"].get(coord.upper())
     if templo is None:
@@ -85,25 +121,64 @@ def obtener_templo(partida_id: str, coord: str):
 
 @app.get("/partidas/{partida_id}/cofre")
 def obtener_cofre(partida_id: str):
+    """
+    Endpoint GET /partidas/{partida_id}/cofre: devuelve el paquete cifrado del cofre.
+    Java lo usa cuando el jugador intenta abrir el cofre: con la contrasena que escribe el jugador
+    (pista 1 + guion + pista 2) descifra este paquete. No incluye la contrasena ni la clave.
+
+    Args: partida_id: Identificador de la partida.
+
+    Returns: El paquete cifrado con la sal, el nonce, el AAD y el texto cifrado en Base64.
+    """
     partida = buscar_partida(partida_id)
     return partida["secretos"]["cofre"]
 
 
 class JugadorRequest(BaseModel):
+    """
+    Cuerpo que debe mandar el cliente en POST /jugadores.
+
+    Attributes: nombre: Nombre del jugador (de 1 a 80 caracteres).
+        alias: Alias unico del jugador (de 3 a 20 caracteres: letras, digitos, - o _).
+    """
     nombre: str
     alias: str
 
 class GuardarEstadoRequest(BaseModel):
+    """
+    Cuerpo que debe mandar el cliente en PUT /partidas/{id}/estado.
+
+    Attributes: revisionBase: Numero de revision sobre el que se construyo este estado (sirve para detectar conflictos).
+        estado: Copia completa (snapshot) del estado de la partida: ronda, turno, jugadores, pistas, etc.
+    """
     revisionBase: int
     estado: dict
 
 
 @app.get("/salud")
 def consultar_salud():
+    """
+    Endpoint GET /salud: sirve para comprobar que el servidor esta encendido y funcionando.
+
+    Returns: Un diccionario con disponible en True y la version del contrato de la API (2).
+    """
     return {"disponible": True, "versionContrato": 2}
 
 @app.post("/jugadores", status_code=201)
 def registrar_jugador(request: JugadorRequest):
+    """
+    Endpoint POST /jugadores: registra un jugador nuevo.
+    Que hace paso a paso:
+        1. Limpia los espacios del nombre y del alias.
+        2. Valida que el nombre tenga de 1 a 80 caracteres y el alias de 3 a 20 caracteres
+           usando solo letras, digitos, guion o guion bajo. Si no cumple responde 400.
+        3. Revisa que el alias no este repetido (sin distinguir mayusculas). Si ya existe responde 409.
+        4. Genera el ID del jugador (J1, J2, J3...), lo guarda en el archivo JSON y lo devuelve.
+        
+    Args: request: Cuerpo de la peticion con el nombre y el alias.
+
+    Returns: El jugador creado con su jugadorId, nombre y alias (codigo 201).
+    """
     nombre = request.nombre.strip()
     alias = request.alias.strip()
 
@@ -130,6 +205,15 @@ def registrar_jugador(request: JugadorRequest):
 
 @app.get("/jugadores")
 def listar_jugadores(alias: str = ""):
+    """
+    Endpoint GET /jugadores: lista los jugadores registrados.
+    Si se manda el parametro ?alias=texto solo devuelve los jugadores cuyo alias contenga ese texto
+    (sin distinguir mayusculas). Si no se manda, devuelve todos.
+
+    Args: alias: Texto opcional para filtrar por alias.
+
+    Returns: Una lista con los jugadores encontrados.
+    """
     with lock_db:
         db = cargar_db()
 
@@ -141,6 +225,16 @@ def listar_jugadores(alias: str = ""):
 
 @app.get("/jugadores/{jugador_id}/estadisticas")
 def estadisticas_jugador(jugador_id: str):
+    """
+    Endpoint GET /jugadores/{jugador_id}/estadisticas: calcula las estadisticas de un jugador.
+    Recorre las partidas guardadas que ya tienen resultado final y suma, para ese jugador,
+    las partidas finalizadas, las victorias, los puntos acumulados y las reliquias entregadas.
+    Cada partida solo cuenta una vez porque el resultado se fija en el primer guardado FINALIZADA.
+
+    Args: jugador_id: Identificador del jugador, por ejemplo J1.
+
+    Returns: Un diccionario con partidasFinalizadas, victorias, puntosAcumulados y reliquiasEntregadas. Si el jugador no existe responde con error 404.
+    """
     with lock_db:
         db = cargar_db()
 
@@ -176,6 +270,14 @@ def estadisticas_jugador(jugador_id: str):
 
 @app.get("/partidas")
 def listar_partidas(jugadorId: str = ""):
+    """
+    Endpoint GET /partidas: lista un resumen de las partidas guardadas.
+    Si se manda el parametro ?jugadorId=valor solo devuelve las partidas donde participa ese jugador.
+
+    Args: jugadorId: Valor opcional para filtrar por jugador.
+
+    Returns: Una lista con el partidaId, los jugadores, el estado (EN_CURSO por defecto), la ronda y la revision de cada partida.
+    """
     with lock_db:
         db = cargar_db()
 
@@ -195,6 +297,15 @@ def listar_partidas(jugadorId: str = ""):
 
 @app.get("/partidas/{partida_id}")
 def obtener_partida(partida_id: str):
+    """
+    Endpoint GET /partidas/{partida_id}: recupera una partida concreta.
+    Java lo usa para cargar una partida y para confirmar un guardado cuya respuesta se perdio.
+    Solo devuelve datos publicos; los secretos (reliquias, pistas y cofre) no salen por aqui.
+
+    Args: partida_id: Identificador de la partida.
+
+    Returns: Un diccionario con el partidaId, la revision, la configuracion y el ultimo estado guardado (null si todavia no se ha guardado ninguno). Si la partida no existe responde con error 404.
+    """
     with lock_db:
         db = cargar_db()
 
@@ -211,6 +322,25 @@ def obtener_partida(partida_id: str):
 
 @app.put("/partidas/{partida_id}/estado")
 def guardar_estado(partida_id: str, request: GuardarEstadoRequest):
+    """
+    Endpoint PUT /partidas/{partida_id}/estado: guarda una copia completa (snapshot) del estado de la partida.
+    Usa el campo revisionBase para evitar que se pise un guardado mas nuevo o que se duplique uno repetido.
+    Que hace paso a paso:
+        1. Busca la partida. Si no existe responde 404.
+        2. Si es exactamente el mismo guardado de antes (misma revisionBase y mismo estado) es un reintento:
+           devuelve la misma confirmacion sin guardar otra vez.
+        3. Si revisionBase no coincide con la revision actual responde 409 (conflicto), porque el cliente
+           esta trabajando sobre una version vieja.
+        4. Revisa que el estado traiga los campos principales. Si falta alguno responde 400.
+        5. Guarda el estado y sube la revision en 1.
+        6. Si el estado es FINALIZADA y todavia no habia resultado, fija el resultado definitivo:
+           gana quien tenga mas puntos, en empate quien entrego mas reliquias, y si tambien empatan ganan ambos.
+           Con ese resultado se calculan las estadisticas.
+    Args: partida_id: Identificador de la partida.
+        request: Cuerpo con la revisionBase y el estado completo.
+
+    Returns: Un diccionario con el partidaId y la nueva revision.
+    """
     estado = request.estado
 
     with lock_db:
@@ -264,4 +394,3 @@ def guardar_estado(partida_id: str, request: GuardarEstadoRequest):
         guardar_db(db)
 
     return {"partidaId": partida_id, "revision": nueva_revision}
-    
