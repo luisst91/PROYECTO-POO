@@ -1,35 +1,47 @@
 package casillas;
 
 /**
- * Representa la casilla de Pantano dentro del tablero de juego.
- * Es un terreno difícil de atravesar que requiere un mayor consumo de puntos de acción
- * en comparación con los senderos normales.
- * 
+ * Casilla de pantano (símbolo P). Entrar a ella cuesta más puntos de acción que a una casilla normal.
+ *
  * @author Ernesto Gutiérrez, Diego Nieto, Luis Torres
  * @version 1.0
  */
-
 public class Pantano extends Casilla{
 
     /**
-     * Construye una nueva instancia de un Pantano en las coordenadas especificadas.
+     * Costo de entrar a un pantano. No tiene un valor fijo: se coloca con {@link #setCostoPantano(int)}
+     * con el valor que entrega la API.
+     */
+    private static int costoPantano;
+
+    /**
+     * Construye un pantano y le asigna el costo de movimiento de los pantanos.
      *
-     * @param nombreCasilla El nombre identificativo de la casilla
-     * @param simbolo       El carácter que representa al pantano en el mapa
-     * @param fila          La coordenada de fila dentro del tablero.
-     * @param columna       La coordenada de columna dentro del tablero.
+     * @param nombreCasilla Nombre que se muestra del terreno ("Pantano")
+     * @param simbolo Letra que lo representa en el tablero ('P')
+     * @param fila Fila donde se ubica la casilla
+     * @param columna Columna donde se ubica la casilla
      */
     public Pantano(String nombreCasilla, char simbolo, int fila, int columna) {
         super(nombreCasilla, simbolo, fila, columna);
+        this.costoCasilla = costoPantano;
     }
 
     /**
-     * Obtiene el costo de movimiento necesario para ingresar a la casilla de Pantano.
+     * Devuelve el costo de entrar a un pantano.
      *
-     * @return {@code 2} puntos de acción debido a la dificultad del terreno.
+     * @return Los puntos de acción que cuesta entrar a un pantano
      */
-    @Override
-    public int obtenerCostoMovimiento() {
-        return 2;
+    public static int getCostoPantano() {
+        return costoPantano;
+    }
+
+    /**
+     * Coloca el costo de entrar a un pantano. Se debe llamar antes de crear el tablero.
+     *
+     * @param nuevoCosto Nuevo costo que entrega la API
+     */
+    public static void setCostoPantano(int nuevoCosto) {
+        costoPantano = nuevoCosto;
     }
 }
