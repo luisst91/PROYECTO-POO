@@ -124,7 +124,7 @@ public class Tablero {
      * @param coordenada Texto de dos caracteres con la letra de la columna y el número de la fila
      * @return La {@link Casilla} de esa coordenada, o {@code null} si el texto es nulo, no tiene dos caracteres o está fuera del tablero
      */
-    public Casilla obtenerCasilla(String coordenada) {
+    public Casilla obtenerCordenadaCasilla(String coordenada) {
         if (coordenada == null || coordenada.length() != 2) {
             return null;
         }
