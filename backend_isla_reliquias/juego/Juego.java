@@ -108,7 +108,7 @@ public class Juego {
         GestorTurnos.setAccionesPorTurno(Integer.parseInt(ClienteApi.valorDe(json, "accionesPorTurno")));
         Jugador.setCapacidadReliquias(Integer.parseInt(ClienteApi.valorDe(json, "capacidadInventario")));
         Casilla.setCostoNormal(Integer.parseInt(ClienteApi.valorDe(json, "costoMovimiento")));
-        Pantano.setCostoNormal(Integer.parseInt(ClienteApi.valorDe(json, "costoPantano")));
+        Pantano.setCostoPantano(Integer.parseInt(ClienteApi.valorDe(json, "costoPantano")));
         AccionesJugador.setCostoExplorar(Integer.parseInt(ClienteApi.valorDe(json, "costoExplorar")));
         AccionesJugador.setCostoEntregar(Integer.parseInt(ClienteApi.valorDe(json, "costoEntregar")));
         AccionesJugador.setCostoAbrirCofre(Integer.parseInt(ClienteApi.valorDe(json, "costoAbrirCofre")));
