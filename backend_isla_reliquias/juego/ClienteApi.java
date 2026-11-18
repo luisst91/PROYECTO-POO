@@ -1,5 +1,7 @@
 package juego;
 
+import casillas.Tablero;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -79,6 +81,17 @@ public class ClienteApi {
     }
 
     /**
+     * Consulta al servidor los valores de configuración del juego (tamaño del tablero, rondas, acciones por turno,
+     * capacidad del inventario y costos de las acciones). Es el método que SACA los valores de la API;
+     * para colocarlos en las clases se usa {@code Juego.aplicarConfiguracion(String)}.
+     *
+     * @return El cuerpo de la respuesta en formato JSON con la configuración, o {@code null} si falla la petición
+     */
+    public String obtenerConfiguracion() {
+        return pedir("/configuracion");
+    }
+
+    /**
      * Construye y ejecuta una petición HTTP de tipo GET hacia una ruta relativa de la API.
      * 
      * @param ruta El endpoint relativo que se concatenará a {@link #urlBase}
@@ -145,28 +158,43 @@ public class ClienteApi {
 
     /**
      * Analiza una cadena JSON y extrae los caracteres en mayúsculas que representan las casillas del tablero,
-     * organizándolos en una matriz 2D de 5X5
+     * organizándolos en una matriz 2D del tamaño configurado del tablero
      * 
      * @param json La cadena de texo en formato JSON que contiene la clave {@code "tablero"}
-     * @return Una matriz de caracteres de dimensiones {@code 5x5} con la distribución del mapa
+     * @return Una matriz de caracteres de dimensiones filas X columnas con la distribución del mapa
      */
     public static char[][] extraerTablero(String json) {
         int inicio = json.indexOf("\"tablero\"");
         int fin = json.indexOf("]]", inicio);
         String tablero = json.substring(inicio, fin);
 
-        char[][] matriz = new char[5][5];
+        char[][] matriz = new char[Tablero.getFilas()][Tablero.getColumnas()];
         int contador = 0;
         for (int i = 0; i < tablero.length(); i++) {
             char c = tablero.charAt(i);
             if (Character.isUpperCase(c)) {
-                matriz[contador / 5][contador % 5] = c;
+                matriz[contador / Tablero.getColumnas()][contador % Tablero.getColumnas()] = c;
                 contador++;
             }
         }
         return matriz;
     }
 
+    /**
+     * Extrae del JSON los nombres de los dos jugadores participante en el orden random determinado por la API
+     * 
+     * @param json La cadena de texto en formato JSON que contiene el arreglo {@code "jugadores"}
+     * @return Un arreglo de {@link Sring} de longitud 2 con los nombres de ambos jugadores
+     */
+    public static String[] extraerJugadores(String json) {
+        int inicio = json.indexOf("[", json.indexOf("\"jugadores\""));
+        int a = json.indexOf("\"", inicio);
+        int b = json.indexOf("\"", a + 1);
+        int c = json.indexOf("\"", b + 1);
+        int d = json.indexOf("\"", c + 1);
+        return new String[]{json.substring(a + 1, b), json.substring(c + 1, d)};
+    }
+}
     /**
      * Extrae del JSON los nombres de los dos jugadores participante en el orden random determinado por la API
      * 
