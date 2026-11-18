@@ -1,132 +1,103 @@
 package casillas;
 
 /**
- * Representa una casilla abstracta genérica dentro del tablero de juego.
- * Contiene las propiedades básicas como nombre, símbolo y ubicación (fila y columna),
- * además de definir el método abstracto para obtener el costo de movimiento de cada terreno.
- * 
+ * Clase base de todas las casillas del tablero (Campamento, Cofre, Templo, Pantano y Sendero).
+ * Guarda el nombre, el símbolo, la posición y el costo en puntos de acción de entrar a la casilla.
+ *
  * @author Ernesto Gutiérrez, Diego Nieto, Luis Torres
  * @version 1.0
  */
-
 public abstract class Casilla {
+
     /**
-     * Nombre identificativo del tipo de casilla (por ejemplo: "Campamento", "Templo").
+     * Costo de entrar a una casilla normal. No tiene un valor fijo: se coloca con {@link #setCostoNormal(int)}
+     * con el valor que entrega la API.
      */
+    private static int costoNormal;
+
     protected String nombreCasilla;
-
-    /**
-     * Carácter que representa visualmente a la casilla en el mapa.
-     */
     protected char simbolo;
-
-    /**
-     * Coordenada de fila donde se ubica la casilla en el tablero.
-     */
     protected int fila;
-
-    /**
-     * Coordenada de columna donde se ubica la casilla en el tablero.
-     */
     protected int columna;
-
     /**
-     * Costo asociado a la casilla.
+     * Puntos de acción que cuesta entrar a esta casilla. Se fija al crearla.
      */
     protected int costoCasilla;
 
     /**
-     * Construye una nueva instancia de una Casilla con sus atributos espaciales e identificativos.
+     * Construye una casilla. Su costo es el de una casilla normal; las subclases
+     * con un costo distinto (como {@link Pantano}) lo cambian en su propio constructor.
      *
-     * @param nombreCasilla El nombre que identifica a la casilla.
-     * @param simbolo       El carácter que representa a la casilla en el tablero.
-     * @param fila          La coordenada de fila dentro del tablero.
-     * @param columna       La coordenada de columna dentro del tablero.
+     * @param nombreCasilla Nombre que se muestra del terreno
+     * @param simbolo Letra que lo representa en el tablero
+     * @param fila Fila donde se ubica la casilla
+     * @param columna Columna donde se ubica la casilla
      */
     public Casilla(String nombreCasilla, char simbolo, int fila, int columna) {
         this.nombreCasilla = nombreCasilla;
         this.simbolo = simbolo;
         this.fila = fila;
         this.columna = columna;
+        this.costoCasilla = costoNormal;
     }
 
     /**
-     * Obtiene el nombre identificativo de la casilla.
+     * Devuelve el costo de entrar a una casilla normal.
      *
-     * @return El nombre de la casilla.
+     * @return Los puntos de acción que cuesta entrar a una casilla normal
      */
+    public static int getCostoNormal() {
+        return costoNormal;
+    }
+
+    /**
+     * Coloca el costo de entrar a una casilla normal. Se debe llamar antes de crear el tablero.
+     *
+     * @param nuevoCosto Nuevo costo que entrega la API
+     */
+    public static void setCostoNormal(int nuevoCosto) {
+        costoNormal = nuevoCosto;
+    }
+
     public String getNombreCasilla() {
         return nombreCasilla;
     }
 
-    /**
-     * Establece el nombre de la casilla.
-     *
-     * @param nombreCasilla El nuevo nombre para la casilla.
-     */
     public void setNombreCasilla(String nombreCasilla) {
         this.nombreCasilla = nombreCasilla;
     }
 
-    /**
-     * Obtiene el símbolo que representa a la casilla en el tablero.
-     *
-     * @return El carácter símbolo de la casilla.
-     */
     public char getSimbolo() {
         return simbolo;
     }
 
-    /**
-     * Establece el símbolo de la casilla.
-     *
-     * @param simbolo El nuevo carácter símbolo.
-     */
     public void setSimbolo(char simbolo) {
         this.simbolo = simbolo;
     }
 
-    /**
-     * Obtiene el índice de la fila donde se encuentra la casilla.
-     *
-     * @return La coordenada de fila.
-     */
     public int getFila() {
         return fila;
     }
 
-    /**
-     * Establece la coordenada de fila de la casilla.
-     *
-     * @param fila El nuevo índice de fila.
-     */
     public void setFila(int fila) {
         this.fila = fila;
     }
 
-    /**
-     * Obtiene el índice de la columna donde se encuentra la casilla.
-     *
-     * @return La coordenada de columna.
-     */
     public int getColumna() {
         return columna;
     }
 
-    /**
-     * Establece la coordenada de columna de la casilla.
-     *
-     * @param columna El nuevo índice de columna.
-     */
     public void setColumna(int columna) {
         this.columna = columna;
     }
 
     /**
-     * Obtiene el costo de movimiento necesario para que un jugador ingrese a esta casilla.
-     * Cada subclase debe implementarlo según el tipo de terreno.
+     * Devuelve los puntos de acción que cuesta moverse a esta casilla.
      *
-     * @return La cantidad de puntos de acción requeridos para entrar en la casilla.
+     * @return El costo de movimiento de la casilla
      */
-    public abstract int obtenerCostoMovimiento();
+    public int obtenerCostoMovimiento() {
+        return costoCasilla;
+    }
+
 }
