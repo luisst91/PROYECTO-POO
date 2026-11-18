@@ -108,7 +108,7 @@ public class Juego {
         GestorTurnos.setAccionesPorTurno(Integer.parseInt(ClienteApi.valorDe(json, "accionesPorTurno")));
         Jugador.setCapacidadReliquias(Integer.parseInt(ClienteApi.valorDe(json, "capacidadInventario")));
         Casilla.setCostoNormal(Integer.parseInt(ClienteApi.valorDe(json, "costoMovimiento")));
-        Pantano.setCostoPantano(Integer.parseInt(ClienteApi.valorDe(json, "costoPantano")));
+        Pantano.setCostoNormal(Integer.parseInt(ClienteApi.valorDe(json, "costoPantano")));
         AccionesJugador.setCostoExplorar(Integer.parseInt(ClienteApi.valorDe(json, "costoExplorar")));
         AccionesJugador.setCostoEntregar(Integer.parseInt(ClienteApi.valorDe(json, "costoEntregar")));
         AccionesJugador.setCostoAbrirCofre(Integer.parseInt(ClienteApi.valorDe(json, "costoAbrirCofre")));
@@ -146,7 +146,7 @@ public class Juego {
         String partidaId = ClienteApi.valorDe(respuesta, "partidaId");
         String[] orden = ClienteApi.extraerJugadores(respuesta);
         Tablero tablero = new Tablero(ClienteApi.extraerTablero(respuesta));
-        Casilla campamento = tablero.obtenerCasilla(ClienteApi.valorDe(respuesta, "campamento"));
+        Casilla campamento = tablero.obtenerCordenadaCasilla(ClienteApi.valorDe(respuesta, "campamento"));
 
         // todos empiezan en el campamento
         Jugador[] jugadores = new Jugador[2];
@@ -187,7 +187,7 @@ public class Juego {
 
             if (opcion.equals("1")) {
                 System.out.print("Coordenada destino (ejemplo B2): ");
-                Casilla destino = tablero.obtenerCasilla(teclado.nextLine().trim().toUpperCase());
+                Casilla destino = tablero.obtenerCordenadaCasilla(teclado.nextLine().trim().toUpperCase());
                 if (destino == null) {
                     System.out.println("ERROR. LA COORDENADA INGRESADA NO ES VALIDA: FUERA DE LOS LIMITES");
                 } else {
