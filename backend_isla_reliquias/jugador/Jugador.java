@@ -14,9 +14,30 @@ import objetos.Reliquia;
 
 public class Jugador {
     /**
-     * Capacidad maxima de reliquias que un jugador puede transportar simultaneamente en su inventario
+     * Capacidad maxima de reliquias que un jugador puede transportar simultaneamente en su inventario.
+     * No tiene un valor fijo: se coloca con {@link #setCapacidadReliquias(int)}
+     * con el valor que entrega la API.
      */
-    public static final int CAPACIDAD_RELIQUIAS = 2;
+    private static int capacidadReliquias;
+
+    /**
+     * Devuelve la capacidad maxima del inventario de un jugador.
+     *
+     * @return La cantidad maxima de reliquias que se pueden llevar a la vez
+     */
+    public static int getCapacidadReliquias() {
+        return capacidadReliquias;
+    }
+
+    /**
+     * Coloca la capacidad del inventario. Se debe llamar antes de crear a los jugadores,
+     * porque el arreglo del inventario se crea con esta capacidad.
+     *
+     * @param nuevaCapacidad Nueva capacidad que entrega la API
+     */
+    public static void setCapacidadReliquias(int nuevaCapacidad) {
+        capacidadReliquias = nuevaCapacidad;
+    }
 
     /**
      * Nombre de usuario unico que identifica al jugador durante la partida
@@ -33,7 +54,7 @@ public class Jugador {
     /**
      * Arreglo que almacena las reliquias que el jugador lleva en su inventario
      */
-    private Reliquia[] inventarioReliquias = new Reliquia[CAPACIDAD_RELIQUIAS];
+    private Reliquia[] inventarioReliquias = new Reliquia[capacidadReliquias];
     /**
      * Cantidad de reliquias que el jugador lleva actualmente en su inventario
      */
@@ -95,10 +116,10 @@ public class Jugador {
     /**
      * Verifica si el inventario del jugador aún tiene espacio disponible para recoger otra reliquia.
      *
-     * @return {@code true} si {@link #cantidadReliquias} es menor que {@link #CAPACIDAD_RELIQUIAS}; {@code false} si está lleno.
+     * @return {@code true} si {@link #cantidadReliquias} es menor que {@link #getCapacidadReliquias()}; {@code false} si está lleno.
      */
     public boolean tieneEspacio() {
-        return cantidadReliquias < CAPACIDAD_RELIQUIAS;
+        return cantidadReliquias < capacidadReliquias;
     }
 
     /**
@@ -178,7 +199,7 @@ public class Jugador {
     /**
      * Obtiene el arreglo interno que representa el inventario de reliquias del jugador.
      *
-     * @return Un arreglo de {@link Reliquia} con capacidad máxima definida por {@link #CAPACIDAD_RELIQUIAS}.
+     * @return Un arreglo de {@link Reliquia} con capacidad máxima definida por {@link #getCapacidadReliquias()}.
      */
     public Reliquia[] getInventarioReliquias() {
         return inventarioReliquias;
