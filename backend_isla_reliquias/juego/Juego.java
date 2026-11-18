@@ -95,8 +95,7 @@ public class Juego {
             System.out.println("NO SE PUDO LEER LA CONFIGURACION DE LA API. NO SE PUEDE INICIAR LA PARTIDA");
             return false;
         }
-        String[] claves = {"filas", "columnas", "rondasTotales", "accionesPorTurno", "capacidadInventario",
-                "costoMovimiento", "costoPantano", "costoExplorar", "costoEntregar", "costoAbrirCofre"};
+        String[] claves = {"filas", "columnas", "rondasTotales", "accionesPorTurno", "capacidadInventario", "costoMovimiento", "costoPantano", "costoExplorar", "costoEntregar", "costoAbrirCofre"};
         for (int i = 0; i < claves.length; i++) {
             if (ClienteApi.valorDe(json, claves[i]) == null) {
                 System.out.println("LA CONFIGURACION DE LA API NO TRAE EL DATO " + claves[i]);
