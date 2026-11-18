@@ -21,6 +21,21 @@ app = FastAPI(title="API Isla de las Reliquias")
 # evita que dos peticiones al mismo tiempo se pisen al guardar el json
 lock_db = threading.Lock()
 
+# valores del juego que Java lee con GET /configuracion y coloca en sus clases.
+# Para cambiar una regla del juego solo hay que cambiar el numero aqui (el tamaño del tablero sale de generador_mapa.py)
+CONFIGURACION = {
+    "filas": CANTIDAD_FILAS,
+    "columnas": CANTIDAD_COLUMNAS,
+    "rondasTotales": 8,
+    "accionesPorTurno": 3,
+    "capacidadInventario": 2,
+    "costoMovimiento": 1,
+    "costoPantano": 2,
+    "costoExplorar": 1,
+    "costoEntregar": 1,
+    "costoAbrirCofre": 1
+}
+
 class CrearPartidaRequest(BaseModel):
     """
     Cuerpo que debe mandar Java en POST /partidas.
@@ -154,6 +169,17 @@ class GuardarEstadoRequest(BaseModel):
     revisionBase: int
     estado: dict
 
+@app.get("/configuracion")
+def obtener_configuracion():
+    """
+    Endpoint GET /configuracion: entrega los valores de las reglas del juego que antes estaban fijos en Java.
+    Java lo llama con ClienteApi.obtenerConfiguracion() y con Juego.aplicarConfiguracion() coloca cada valor
+    en el atributo de la clase que le corresponde (tamaño del tablero, rondas, acciones por turno,
+    capacidad del inventario y costos de las acciones).
+
+    Returns: Un diccionario plano con filas, columnas, rondasTotales, accionesPorTurno, capacidadInventario, costoMovimiento, costoPantano, costoExplorar, costoEntregar y costoAbrirCofre.
+    """
+    return CONFIGURACION
 
 @app.get("/salud")
 def consultar_salud():
