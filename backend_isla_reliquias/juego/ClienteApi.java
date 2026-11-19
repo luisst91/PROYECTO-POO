@@ -184,7 +184,7 @@ public class ClienteApi {
      * Extrae del JSON los nombres de los dos jugadores participante en el orden random determinado por la API
      * 
      * @param json La cadena de texto en formato JSON que contiene el arreglo {@code "jugadores"}
-     * @return Un arreglo de {@link Sring} de longitud 2 con los nombres de ambos jugadores
+     * @return Un arreglo de {@link String} de longitud 2 con los nombres de ambos jugadores
      */
     public static String[] extraerJugadores(String json) {
         int inicio = json.indexOf("[", json.indexOf("\"jugadores\""));
