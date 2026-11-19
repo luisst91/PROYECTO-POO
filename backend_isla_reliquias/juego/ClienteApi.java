@@ -97,7 +97,7 @@ public class ClienteApi {
      * @param ruta El endpoint relativo que se concatenará a {@link #urlBase}
      * @return El texto de la respuesta del servidor, o {@code null} si ocurre un error
      */
-    private String pedir(String ruta) {
+    public String pedir(String ruta) {
         HttpRequest peticion = HttpRequest.newBuilder()
                 .uri(URI.create(urlBase + ruta))
                 .GET()
@@ -112,7 +112,7 @@ public class ClienteApi {
      * @param peticion La solicitud {@link HttpRequest} lista para ser enviada
      * @return El contenido en texto plano del cuerpo de la respuesta, o {@code null} si hubo un error
      */
-    private String enviar(HttpRequest peticion) {
+    public String enviar(HttpRequest peticion) {
         try {
             HttpResponse<String> respuesta = cliente.send(peticion, HttpResponse.BodyHandlers.ofString());
             if (respuesta.statusCode() != 200) {
