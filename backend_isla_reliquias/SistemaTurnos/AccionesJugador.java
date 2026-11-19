@@ -265,7 +265,7 @@ public class AccionesJugador {
     }
 
     // formato: letras mayusculas y numeros, con maximo un guion en medio, de 4 a 20 caracteres
-    private boolean formatoValido(String clave){
+    public boolean formatoValido(String clave){
         if (clave.length() < 4 || clave.length() > 20){
             return false;
         }
