@@ -15,8 +15,8 @@ public class GestorTurnos {
      * {@link #setAccionesPorTurno(int)} con el valor que entrega la API.
      */
     private static int accionesPorTurno;
-    public static final String EstadoEnCurso = "EN_CURSO";
-    public static final String EstadoFinal = "FINALIZADA";
+    public static final String estadoEnCurso = "EN_CURSO";
+    public static final String estadoFinal = "FINALIZADA";
 
     private List<String> ordenJugadores;
     private int indiceJugadorActual;
