@@ -32,7 +32,7 @@ public class ClienteApi {
      * Construye una nueva instancia del cliente apuntando a la URL base especificada.
      * Confirgura internament el cliente HTTP usando la version HTTP/1.1 para asegurar compatibilidad con Uvicorn.
      * 
-     * @param urlBase
+     * @param: urlBase
      */
 
     public ClienteApi(String urlBase) {
