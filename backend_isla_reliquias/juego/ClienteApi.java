@@ -196,7 +196,7 @@ public class ClienteApi {
     }
 
     /**
-     * Consulta las estadísticas acumuladas de un jugador (RF13).
+     * Consulta las estadísticas acumuladas de un jugador.
      * 
      * @param jugadorId Identificador del jugador (ej. J1).
      * @return JSON con las estadísticas (victorias, puntos, etc.), o {@code null} si no existe.
@@ -206,7 +206,7 @@ public class ClienteApi {
     }
 
     /**
-     * Envía el estado actual (snapshot) de la partida para guardarlo en la base de datos (RF11).
+     * Envía el estado actual (snapshot) de la partida para guardarlo en la base de datos.
      * 
      * @param partidaId Identificador de la partida.
      * @param revisionBase Número de revisión actual que tiene el cliente antes de este cambio.
@@ -224,7 +224,7 @@ public class ClienteApi {
     }
     
     /**
-     * Lista las partidas asociadas a un jugador específico (RF12).
+     * Lista las partidas asociadas a un jugador específico.
      * 
      * @param jugadorId El ID del jugador para filtrar las partidas.
      * @return JSON con la lista de partidas.
