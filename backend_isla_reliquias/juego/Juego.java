@@ -68,7 +68,7 @@ public class Juego {
      */
 
 
-    private static String pedirNombre(Scanner teclado, String texto) {
+    public static String pedirNombre(Scanner teclado, String texto) {
         String nombre = "";
         while (nombre.length() == 0 || nombre.indexOf('"') != -1 || nombre.indexOf('\\') != -1) {
             System.out.print(texto);
@@ -90,7 +90,7 @@ public class Juego {
      * @param json Cadena en formato JSON con la configuración, o {@code null} si la API no respondió
      * @return {@code true} si se colocaron todos los valores; {@code false} si la API no respondió o falta algún dato
      */
-    private static boolean aplicarConfiguracion(String json) {
+    public static boolean aplicarConfiguracion(String json) {
         if (json == null) {
             System.out.println("NO SE PUDO LEER LA CONFIGURACION DE LA API. NO SE PUEDE INICIAR LA PARTIDA");
             return false;
@@ -125,7 +125,7 @@ public class Juego {
      * @param cliente Instancia de {@link ClienteApi} para comunicarse con el servidor.
      */
 
-    private static void nuevaPartida(Scanner teclado, ClienteApi cliente) {
+    public static void nuevaPartida(Scanner teclado, ClienteApi cliente) {
         String nombre1 = pedirNombre(teclado, "Nombre del jugador 1: ");
         String nombre2 = pedirNombre(teclado, "Nombre del jugador 2: ");
         if (nombre1.equalsIgnoreCase(nombre2)) {
@@ -234,7 +234,7 @@ public class Juego {
      * @return El objeto {@link Jugador} correspondiente
      */
 
-    private static Jugador buscarJugador(Jugador[] jugadores, String nombre) {
+    public static Jugador buscarJugador(Jugador[] jugadores, String nombre) {
         if (jugadores[0].getNombreUsuario().equals(nombre)) {
             return jugadores[0];
         }
@@ -249,7 +249,7 @@ public class Juego {
      * @param actual El {@link Jugador} que posee el turno actual
      * @param tablero El {@link Tablero} de la partida para consutar la casilla donde se encuentra el jugador
      */
-    private static void mostrarEstado(GestorTurnos gestor, Jugador actual, Tablero tablero) {
+    public static void mostrarEstado(GestorTurnos gestor, Jugador actual, Tablero tablero) {
         Casilla casilla = tablero.obtenerCasilla(actual.getFilaActual(), actual.getColumnaActual());
         System.out.println();
         System.out.println("RONDA " + gestor.obtenerRonda() + "/" + GestorTurnos.getRondasTotales()
@@ -267,7 +267,7 @@ public class Juego {
      * 
      * @param jugador El {@link Jugador} cuyo inventario se desea visualizar
      */
-    private static void mostrarInventario(Jugador jugador) {
+    public static void mostrarInventario(Jugador jugador) {
         System.out.println("INVENTARIO DE " + jugador.getNombreUsuario() + ":");
         if (!jugador.tieneReliquias()) {
             System.out.println("  (vacio)");
@@ -290,7 +290,7 @@ public class Juego {
      * @param jugadores Arreglo con los jugadores activos para mostrar sus posiciones
      */
 
-    private static void mostrarTablero(Tablero tablero, Jugador[] jugadores) {
+    public static void mostrarTablero(Tablero tablero, Jugador[] jugadores) {
         String linea = "   .";
         String letras = "   ";
         for (int c = 0; c < Tablero.getColumnas(); c++) {
@@ -334,7 +334,7 @@ public class Juego {
      * @param jugadores Arreglo con los dos jugadores cuyos puntajes serán evaluados
      */
 
-    private static void mostrarResultado(Jugador[] jugadores) {
+    public static void mostrarResultado(Jugador[] jugadores) {
         System.out.println();
         System.out.println("===== FIN DE LA PARTIDA =====");
         for (int i = 0; i < 2; i++) {
