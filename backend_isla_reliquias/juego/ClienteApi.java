@@ -194,4 +194,42 @@ public class ClienteApi {
         int d = json.indexOf("\"", c + 1);
         return new String[]{json.substring(a + 1, b), json.substring(c + 1, d)};
     }
+
+    /**
+     * Consulta las estadísticas acumuladas de un jugador (RF13).
+     * 
+     * @param jugadorId Identificador del jugador (ej. J1).
+     * @return JSON con las estadísticas (victorias, puntos, etc.), o {@code null} si no existe.
+     */
+    public String obtenerEstadisticas(String jugadorId) {
+        return pedir("/jugadores/" + jugadorId + "/estadisticas");
+    }
+
+    /**
+     * Envía el estado actual (snapshot) de la partida para guardarlo en la base de datos (RF11).
+     * 
+     * @param partidaId Identificador de la partida.
+     * @param revisionBase Número de revisión actual que tiene el cliente antes de este cambio.
+     * @param estadoJson Cadena JSON que representa todo el estado de la partida, los jugadores y rondas.
+     * @return JSON con la nueva revisión confirmada por el servidor, o {@code null} si falla o hay conflicto.
+     */
+    public String guardarEstado(String partidaId, int revisionBase, String estadoJson) {
+        String json = "{\"revisionBase\":" + revisionBase + ",\"estado\":" + estadoJson + "}";
+        HttpRequest peticion = HttpRequest.newBuilder()
+                .uri(URI.create(urlBase + "/partidas/" + partidaId + "/estado"))
+                .header("Content-Type", "application/json")
+                .PUT(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+        return enviar(peticion);
+    }
+    
+    /**
+     * Lista las partidas asociadas a un jugador específico (RF12).
+     * 
+     * @param jugadorId El ID del jugador para filtrar las partidas.
+     * @return JSON con la lista de partidas.
+     */
+    public String listarPartidas(String jugadorId) {
+        return pedir("/partidas?jugadorId=" + jugadorId);
+    }
 }
